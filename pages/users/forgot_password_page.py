@@ -15,9 +15,10 @@ class ForgotPasswordPage(BasePage):
     def get_forgot_password_page(self):
         self.driver.get(Urls.HOST + Urls.FORGOT_PASSWORD_PAGE_PATH)
         # self.find_element_with_wait(HeaderLocators.LOGO)
-        WebDriverWait(self.driver, Constants.TIMEOUT).until(
-            EC.invisibility_of_element_located(SharedLocators.LOADING_ANIMATION)
-        )
+        # WebDriverWait(self.driver, Constants.TIMEOUT).until(
+        #     EC.invisibility_of_element_located(SharedLocators.LOADING_ANIMATION)
+        # )
+        self.wait_for_loading_animation_completed()
 
 
 

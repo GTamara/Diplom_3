@@ -1,5 +1,8 @@
-from selenium.webdriver import Keys
+import random
+
+from selenium.webdriver import Keys, ActionChains
 from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -23,10 +26,15 @@ class BasePage:
 
     def click_element(self, locator: tuple[str, str]):
         # self.find_element_with_wait(locator)
+        # WebDriverWait(self.driver, Constants.TIMEOUT).until(
+        #     EC.visibility_of_all_elements_located(locator)
+        #     # EC.visibility_of_all_elements_located(locator)
+        # )
         WebDriverWait(self.driver, Constants.TIMEOUT).until(
             EC.element_to_be_clickable(locator)
             # EC.visibility_of_all_elements_located(locator)
         )
+
         # WebDriverWait(self.driver, Constants.TIMEOUT).until(
         #     EC.element_to_be_clickable(locator)
         #     # EC.visibility_of_all_elements_located(locator)
@@ -37,13 +45,22 @@ class BasePage:
         element = self.driver.find_element(*locator)
         self.driver.execute_script("arguments[0].scrollIntoView();", element)
 
+    def scroll_to_web_element(self, element: WebElement):
+        # element = self.driver.find_element(*locator)
+        self.driver.execute_script("arguments[0].scrollIntoView();", element)
+
     @staticmethod
     def format_locator(
             locator: tuple[str, str],
-            num: int | str
+            num: int | str | list
     ) -> tuple[str, str]:
         method, selector = locator
-        formatted_locator: str = selector.format(num)
+        if type(num) in [int, str]:
+            formatted_locator: str = selector.format(num)
+        elif type(num) == list:
+            formatted_locator: str = selector.format(*num)
+        else:
+            formatted_locator = locator
         return method, formatted_locator
 
     def get_text_node(self, locator: tuple[str, str]):
@@ -64,12 +81,12 @@ class BasePage:
     def fill_datepicker_manualy(
         self,
         locator: tuple[str, str], 
-        value
+        value: str
     ):
         self.fill_text_field(locator, value)
         self.find_element_with_wait(*locator).send_keys(Keys.ESCAPE)
 
-    def set_checkbox_value(self, locator: tuple[str, str], checked):
+    def set_checkbox_value(self, locator: tuple[str, str], checked: bool):
         checkbox = self.find_element_with_wait(locator)
         current_value = checkbox.get_attribute('checked')
         if bool(current_value) != checked:
@@ -83,12 +100,40 @@ class BasePage:
         return control.get_attribute('value')
 
     def are_elements_present_on_page(self, locator: tuple[str, str]):
-        return bool(
-            len(self.driver.find_elements(*locator))
-        )
+        return len(self.driver.find_elements(*locator)) > 0
 
     def wait_for_loading_animation_completed(self):
         WebDriverWait(self.driver, Constants.TIMEOUT).until(
             EC.invisibility_of_element_located(SharedLocators.LOADING_ANIMATION)
         )
+
+    def wait_until_element_disappears(self, locator):
+        WebDriverWait(self.driver, Constants.TIMEOUT).until(
+            EC.invisibility_of_element_located(locator)
+        )
+
+    def wait_for_loading_progress_completed(self):
+        self.wait_until_element_disappears(SharedLocators.CONTENT_LOADING_PROGRESS)
+
+    def wait_for_all_elements_loaded(self, locator: tuple[str, str]):
+        WebDriverWait(self.driver, 30). \
+            until(
+                EC.visibility_of_all_elements_located(locator)
+            )
+
+    def select_random_item_index(self, locator):
+        items_list = self.driver.find_elements(*locator)
+        index = random.randint(
+            0, len(items_list) - 1
+        )
+        return index
+
+    def drag_and_drop_element(self, source, target):
+        sourceElement = self.find_element_with_wait(source)
+        targetElement = self.find_element_with_wait(target)
+        ActionChains(self.driver).drag_and_drop(sourceElement, targetElement).perform()
+
+    #
+    # def get_text_node_within_web_element(self, web_element: WebElement, locator: tuple[str, str]):
+    #     return web_element.find_element(*locator).text
 

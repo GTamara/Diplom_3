@@ -33,8 +33,8 @@ def chrome_driver():
 @pytest.fixture(
     scope="function",
     params=[
-        'firefox_driver',
-        # 'chrome_driver',
+        # 'firefox_driver',
+        'chrome_driver',
     ]
 )
 def driver(request):
