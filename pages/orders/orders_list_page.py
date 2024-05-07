@@ -13,6 +13,12 @@ from pages.base_page import BasePage
 
 class OrdersListPage(BasePage):
 
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.orders_quantity = len(
+            self.driver.find_elements(*OrdersListLocators.ORDER_ITEM)
+        )
+
     def get_orders_list_page(self):
         self.driver.get(Urls.HOST + Urls.ORDERS_LIST_PATH)
         self.wait_for_orders_list_page_ready()
@@ -46,7 +52,7 @@ class OrdersListPage(BasePage):
     def click_random_order_item_and_get_its_id(self):
         order_item_to_click_index = self.select_random_item_index(OrdersListLocators.ORDER_ITEM)
         formatted_item_locator = self.format_locator(
-            OrdersListLocators.INDEXED_ORDER_ITEM_ID,
+            OrdersListLocators.INDEXED_ORDER_ITEM_NUM,
             order_item_to_click_index + 1
         )
         order_id = self.get_text_node(
@@ -63,12 +69,45 @@ class OrdersListPage(BasePage):
         )
         self.click_element(formatted_item_locator)
 
+    def wait_for_order_details_popup_ready(self):
+        # подождать, пока все элементы попапа загрузятся и кнопка закрытия попапа будет доступна для клика
+        self.find_element_with_wait(OrdersListLocators.ORDER_DETAILS_POPUP)
+        self.find_element_with_wait(OrdersListLocators.ORDER_DETAILS_POPUP_CLOSE_BTN)
+        self.wait_for_orders_list_page_ready()
+
     def click_order_popup_close_btn(self):
+        # подождать, пока все элементы попапа загрузятся и кнопка закрытия попапа будет доступна для клика
+        self.wait_for_order_details_popup_ready()
         self.find_element_with_wait(OrdersListLocators.ORDER_DETAILS_POPUP_CLOSE_BTN).click()
 
     def is_order_details_popup_hidden(self):
         self.wait_until_element_disappears(OrdersListLocators.ORDER_DETAILS_POPUP)
         return True
+
+    def get_all_order_numbers_list(self) -> list[str]:
+        order_nums_list = []
+        for i in range(self.orders_quantity):
+            formatted_locator = self.format_locator(
+                OrdersListLocators.INDEXED_ORDER_ITEM_NUM,
+                i + 1
+            )
+            next_order_num = self.find_element_without_wait(formatted_locator).text
+            order_nums_list.append(next_order_num)
+        return order_nums_list
+
+    def get_completed_orders_counter_value(self, counter_type: str):
+        match counter_type:
+            case 'all_time':
+                return self.get_text_node(OrdersListLocators.ALL_TIME_COMPLETED_COUNTER)
+            case 'today':
+                return self.get_text_node(OrdersListLocators.TODAY_COMPLETED_COUNTER)
+
+    def get_in_progress_order_num(self):
+        return self.find_element_with_wait(OrdersListLocators.IN_PROGRESS_ORDER_NUM).text
+
+
+
+
 
 
 

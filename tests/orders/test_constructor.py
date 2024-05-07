@@ -1,8 +1,8 @@
-import time
-
 import allure
 import pytest
 
+from constants.urls import Urls
+from data.orders_data import test_orders_list
 from helper_functions.shared_methods import SharedMethods
 from pages.orders.constructor_page import ConstructorPage
 from pages.users.login_page import LoginPage
@@ -10,6 +10,7 @@ from pages.users.login_page import LoginPage
 
 class TestConstructorPage:
 
+    @allure.title('Клик по ссылке "Конструктор" ведет на страницу оформления заказа')
     def test_click_header_constructor_link_directs_to_constructor_page(self, driver):
         SharedMethods.get_main_page(driver)
         constructor_page = ConstructorPage(driver)
@@ -17,6 +18,7 @@ class TestConstructorPage:
         constructor_page.wait_for_loading_animation_completed()
         constructor_page.wait_for_constructor_page_ready()
         assert constructor_page.is_constructor_page()
+        assert driver.current_url == Urls.HOST
 
     @pytest.mark.parametrize(
         'ingredient_type_index',
@@ -67,14 +69,7 @@ class TestConstructorPage:
 
     @pytest.mark.parametrize(
         'sauce_quantity, filling_quantity', # buns_quantity = 1 for all cases
-        [
-            (0, 0),
-            (1, 0),
-            (0, 1),
-            (1, 1),
-            (2, 2),
-            (4, 9),
-        ]
+        test_orders_list[len(test_orders_list) - 1]
     )
     @allure.title('залогиненный пользователь может оформить заказ')
     def test_create_order_with_authorized_user_success(
@@ -87,10 +82,13 @@ class TestConstructorPage:
         login_page.login(user_login_valid_creds)
         constructor_page = ConstructorPage(driver)
         constructor_page.wait_for_constructor_page_ready()
-        constructor_page.set_order(sauce_quantity, filling_quantity)
+        constructor_page.create_order(
+            sauce_quantity,
+            filling_quantity
+        )
         constructor_page.wait_for_loading_animation_completed()
 
-        assert constructor_page.check_new_order_popup()
+        assert constructor_page.get_new_order_num_from_popup().isdigit()
 
 
 

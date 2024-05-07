@@ -1,6 +1,12 @@
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+from constants.constants import Constants
 from constants.urls import Urls
 from locators.orders.constructor_page_locators import ConstructorPageLocators
 from locators.header_locators import HeaderLocators
+from locators.shared_locators import SharedLocators
 from pages.base_page import BasePage
 
 
@@ -27,6 +33,19 @@ class ConstructorPage(BasePage):
     def wait_for_constructor_page_ready(self):
         self.wait_for_all_elements_loaded(ConstructorPageLocators.BURGER_INGREDIENT_IMAGE)
 
+    def wait_for_popup_ready(self):
+        # подождать, пока все элементы попапа загрузятся и кнопка закрытия попапа будет доступна для клика
+        WebDriverWait(self.driver, Constants.TIMEOUT).until(
+            EC.invisibility_of_element(
+                SharedLocators.POPUP_OVERLAY
+            )
+        )
+        # self.find_element_with_wait(ConstructorPageLocators.NEW_ORDER_POPUP)
+        self.find_element_with_wait(ConstructorPageLocators.POPUP_CLOSE_BTN)
+        # self.find_element_with_wait(ConstructorPageLocators.TICK_ANIMATION)
+        # self.find_element_with_wait(ConstructorPageLocators.NEW_ORDER_POPUP_ORDER_NUMBER)
+        # self.wait_for_constructor_page_ready()
+
     def get_random_ingredient(self, category_index: int):
         specified_category_ingredient_item_selector = \
             self.format_locator(
@@ -47,29 +66,31 @@ class ConstructorPage(BasePage):
         }
 
     def click_random_ingredient_item_and_get_its_title(self, category_index: int):
-        specified_category_ingredient_item_selector = \
-            self.format_locator(
-                ConstructorPageLocators.SPECIFIED_CATEGORY_INGREDIENT_ITEM,
-                category_index
-            )
+        # specified_category_ingredient_item_selector = \
+        #     self.format_locator(
+        #         ConstructorPageLocators.SPECIFIED_CATEGORY_INGREDIENT_ITEM,
+        #         category_index
+        #     )
 
-        item_to_click_index = self.select_random_item_index(specified_category_ingredient_item_selector)
-        formatted_item_locator = self.format_locator(
-            ConstructorPageLocators.SPECIFIED_CATEGORY_INDEXED_INGREDIENT_ITEM,
-            [
-                category_index, item_to_click_index + 1
-            ]
-        )
+        # item_to_click_index = self.select_random_item_index(specified_category_ingredient_item_selector)
+        # formatted_item_locator = self.format_locator(
+        #     ConstructorPageLocators.SPECIFIED_CATEGORY_INDEXED_INGREDIENT_ITEM,
+        #     [
+        #         category_index, item_to_click_index + 1
+        #     ]
+        # )
+        ingredient = self.get_random_ingredient(category_index)
+
         formatted_item_title_locator = self.format_locator(
             ConstructorPageLocators.SPECIFIED_CATEGORY_INDEXED_INGREDIENT_ITEM_TITLE,
             [
-                category_index, item_to_click_index + 1
+                category_index, ingredient['index'] + 1
             ]
         )
         ingredient_title = self.get_text_node(
             formatted_item_title_locator
         )
-        self.click_element(formatted_item_locator)
+        self.click_element(ingredient['locator'])
         return ingredient_title
 
     def check_ingredient_title_within_popup(self, clicked_ingredient_title: str):
@@ -81,10 +102,16 @@ class ConstructorPage(BasePage):
         self.click_element(formatted_item_locator)
 
     def click_ingredient_popup_close_btn(self):
-        self.click_element(ConstructorPageLocators.INGREDIENT_POPUP_CLOSE_BTN)
+        self.wait_for_popup_ready()
+        self.click_element_containing_svg_icon(ConstructorPageLocators.POPUP_CLOSE_BTN)
+
+    def click_new_order_popup_close_btn(self):
+        self.wait_for_popup_ready()
+
+        self.click_element_containing_svg_icon(ConstructorPageLocators.POPUP_CLOSE_BTN)
 
     def is_ingredient_popup_hidden(self):
-        self.wait_until_element_disappears(ConstructorPageLocators.INGREDIENT_POPUP)
+        self.wait_until_element_disappears(ConstructorPageLocators.POPUP)
         return True
 
     def add_ingredient_to_bucket(self, category_index):
@@ -107,19 +134,36 @@ class ConstructorPage(BasePage):
             self.get_text_node(selected_ingredient_counter_locator)
         )
 
-    def set_order(self, sauce_quantity, filling_quantity):
+    def create_order(self, sauce_quantity, filling_quantity):
         self.add_ingredient_to_bucket(1)
         for i in range(sauce_quantity):
             self.add_ingredient_to_bucket(2)
         for i in range(filling_quantity):
             self.add_ingredient_to_bucket(3)
-        self.click_element(ConstructorPageLocators.SET_ORDER_BUTTON)
+        self.click_element(ConstructorPageLocators.CREATE_ORDER_BUTTON)
+        self.wait_for_loading_animation_completed()
+        self.wait_for_loading_progress_completed()
 
-    def check_new_order_popup(self):
-        self.find_element_with_wait(ConstructorPageLocators.NEW_ORDER_POPUP)
+    def create_orders_list(self, list_for_creating_orders):
+        self.wait_for_constructor_page_ready()
+        for i in list_for_creating_orders:
+            self.create_order(i[0], i[1])
+            self.click_new_order_popup_close_btn()
+
+    def get_new_order_num_from_popup(self):
+        self.find_element_with_wait(ConstructorPageLocators.POPUP)
         self.find_element_with_wait(ConstructorPageLocators.NEW_ORDER_POPUP_ORDER_TITLE)
         order_number = self.find_element_with_wait(ConstructorPageLocators.NEW_ORDER_POPUP_ORDER_NUMBER).text
-        return order_number.isdigit()
+        return order_number
+
+    def get_created_order_num(self, sauce_quantity: int, filling_quantity: int):
+        self.wait_for_constructor_page_ready()
+        self.create_order(sauce_quantity, filling_quantity)
+        new_order_num = self.get_new_order_num_from_popup()
+        self.click_new_order_popup_close_btn()
+        return new_order_num
+
+
 
 
 

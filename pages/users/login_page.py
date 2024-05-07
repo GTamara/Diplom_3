@@ -38,6 +38,7 @@ class LoginPage(BasePage):
             creds['password']
         )
         self.click_element(LoginPageLocators.LOGIN_BUTTON)
+        self.wait_for_loading_animation_completed()
 
 
     # def get_forgot_password_page(self):

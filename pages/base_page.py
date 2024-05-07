@@ -1,4 +1,5 @@
 import random
+import time
 
 from selenium.webdriver import Keys, ActionChains
 from selenium.webdriver.firefox.webdriver import WebDriver
@@ -24,22 +25,33 @@ class BasePage:
         # )
         return self.driver.find_element(*locator)
 
+    def find_element_without_wait(self, locator: tuple[str, str]):
+        return self.driver.find_element(*locator)
+
     def click_element(self, locator: tuple[str, str]):
-        # self.find_element_with_wait(locator)
-        # WebDriverWait(self.driver, Constants.TIMEOUT).until(
-        #     EC.visibility_of_all_elements_located(locator)
-        #     # EC.visibility_of_all_elements_located(locator)
-        # )
         WebDriverWait(self.driver, Constants.TIMEOUT).until(
             EC.element_to_be_clickable(locator)
-            # EC.visibility_of_all_elements_located(locator)
         )
-
-        # WebDriverWait(self.driver, Constants.TIMEOUT).until(
-        #     EC.element_to_be_clickable(locator)
-        #     # EC.visibility_of_all_elements_located(locator)
-        # )
         self.find_element_with_wait(locator).click()
+
+    def click_element_containing_svg_icon(self, locator: tuple[str, str]):
+
+
+
+        svg_element_path = locator[1] + '/*[name()="svg"]'
+        WebDriverWait(self.driver, Constants.TIMEOUT).until(
+            EC.visibility_of_all_elements_located(
+                (locator[0], svg_element_path)
+            )
+        )
+        WebDriverWait(self.driver, Constants.TIMEOUT).until(
+            EC.element_to_be_clickable(locator)
+        )
+        # self.driver.execute_script('alert("gfjhgfjh")')
+        element = self.find_element_with_wait(
+            (locator[0], svg_element_path)
+        )
+        element.click()
 
     def scroll_to_element(self, locator: tuple[str, str]):
         element = self.driver.find_element(*locator)

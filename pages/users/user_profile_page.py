@@ -10,12 +10,15 @@ class UserProfilePage(BasePage):
 
     def click_header_user_profile_link(self):
         self.click_element(HeaderLocators.USER_PROFILE_LINK)
+        self.wait_for_loading_animation_completed()
 
     def click_order_history_link(self):
         self.click_element(UserProfileLocators.ORDER_HISTORY_LINK)
+        self.wait_for_loading_animation_completed()
 
     def click_logout_button(self):
         self.click_element(UserProfileLocators.LOGOUT_BUTTON)
+        self.wait_for_loading_animation_completed()
 
     def is_user_account_page(self):
         self.find_element_with_wait(UserProfileLocators.USER_DATA_FORM)
