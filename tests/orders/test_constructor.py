@@ -94,3 +94,4 @@ class TestConstructorPage:
 
 
 
+        assert constructor_page.is_constructor_page()

@@ -7,9 +7,6 @@ class LoginPage(BasePage):
 
     def get_login_page(self):
         self.driver.get(Urls.HOST + Urls.LOGIN_PAGE_PATH)
-        # WebDriverWait(self.driver, Constants.TIMEOUT).until(
-        #     EC.invisibility_of_element_located(SharedLocators.LOADING_ANIMATION)
-        # )
         self.wait_for_loading_animation_completed()
 
     def is_login_page(self):
@@ -39,11 +36,3 @@ class LoginPage(BasePage):
         )
         self.click_element(LoginPageLocators.LOGIN_BUTTON)
         self.wait_for_loading_animation_completed()
-
-
-    # def get_forgot_password_page(self):
-    #     self.driver.get(Urls.HOST_URL + Urls.FORGOT_PASSWORD_PAGE_PATH)
-    #     # self.find_element_with_wait(HeaderLocators.LOGO)
-    #     WebDriverWait(self.driver, Constants.TIMEOUT).until(
-    #         EC.invisibility_of_element_located(ForgotPasswordLocators.FORGOT_PASSWORD_LOADING_ANIMATION)
-    #     )

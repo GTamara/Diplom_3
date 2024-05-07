@@ -5,22 +5,14 @@ from constants.urls import Urls
 from helper_functions.shared_helper_funcs import SharedHelperFuncs
 from locators.users.forgot_password_locators import ForgotPasswordLocators
 from locators.users.login_page_locators import LoginPageLocators
-from locators.shared_locators import SharedLocators
 from pages.base_page import BasePage
-from selenium.webdriver.support import expected_conditions as EC
 
 
 class ForgotPasswordPage(BasePage):
 
     def get_forgot_password_page(self):
         self.driver.get(Urls.HOST + Urls.FORGOT_PASSWORD_PAGE_PATH)
-        # self.find_element_with_wait(HeaderLocators.LOGO)
-        # WebDriverWait(self.driver, Constants.TIMEOUT).until(
-        #     EC.invisibility_of_element_located(SharedLocators.LOADING_ANIMATION)
-        # )
         self.wait_for_loading_animation_completed()
-
-
 
     def fill_and_submit_forgot_password_form(self, email_value: str | None):
         if not email_value:

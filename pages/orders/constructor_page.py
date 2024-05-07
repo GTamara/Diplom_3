@@ -7,6 +7,8 @@ from constants.urls import Urls
 from locators.orders.constructor_page_locators import ConstructorPageLocators
 from locators.header_locators import HeaderLocators
 from locators.shared_locators import SharedLocators
+from locators.orders.constructor_page_locators import ConstructorPageLocators
+from locators.header_locators import HeaderLocators
 from pages.base_page import BasePage
 
 
@@ -40,11 +42,7 @@ class ConstructorPage(BasePage):
                 SharedLocators.POPUP_OVERLAY
             )
         )
-        # self.find_element_with_wait(ConstructorPageLocators.NEW_ORDER_POPUP)
         self.find_element_with_wait(ConstructorPageLocators.POPUP_CLOSE_BTN)
-        # self.find_element_with_wait(ConstructorPageLocators.TICK_ANIMATION)
-        # self.find_element_with_wait(ConstructorPageLocators.NEW_ORDER_POPUP_ORDER_NUMBER)
-        # self.wait_for_constructor_page_ready()
 
     def get_random_ingredient(self, category_index: int):
         specified_category_ingredient_item_selector = \
@@ -66,21 +64,7 @@ class ConstructorPage(BasePage):
         }
 
     def click_random_ingredient_item_and_get_its_title(self, category_index: int):
-        # specified_category_ingredient_item_selector = \
-        #     self.format_locator(
-        #         ConstructorPageLocators.SPECIFIED_CATEGORY_INGREDIENT_ITEM,
-        #         category_index
-        #     )
-
-        # item_to_click_index = self.select_random_item_index(specified_category_ingredient_item_selector)
-        # formatted_item_locator = self.format_locator(
-        #     ConstructorPageLocators.SPECIFIED_CATEGORY_INDEXED_INGREDIENT_ITEM,
-        #     [
-        #         category_index, item_to_click_index + 1
-        #     ]
-        # )
         ingredient = self.get_random_ingredient(category_index)
-
         formatted_item_title_locator = self.format_locator(
             ConstructorPageLocators.SPECIFIED_CATEGORY_INDEXED_INGREDIENT_ITEM_TITLE,
             [
@@ -162,8 +146,3 @@ class ConstructorPage(BasePage):
         new_order_num = self.get_new_order_num_from_popup()
         self.click_new_order_popup_close_btn()
         return new_order_num
-
-
-
-
-

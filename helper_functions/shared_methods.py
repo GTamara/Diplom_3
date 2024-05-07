@@ -4,23 +4,11 @@ import allure
 import requests
 from requests import Response
 from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
-
 from constants.urls import Urls
-from constants.constants import Constants
 from helper_functions.shared_helper_funcs import SharedHelperFuncs
 
 
 class SharedMethods:
-
-    # @staticmethod
-    # def get_login_page(driver: WebDriver):
-    #     driver.get(Urls.HOST_URL + Urls.LOGIN_PAGE_PATH)
-
-    # @staticmethod
-    # def get_forgot_password_page(driver: WebDriver):
-    #     driver.get(Urls.HOST_URL + Urls.FORGOT_PASSWORD_PAGE_PATH)
 
     @staticmethod
     def get_main_page(driver: WebDriver):
@@ -68,6 +56,3 @@ class SharedMethods:
             url=url,
             headers={'Authorization': token}
         )
-
-
-

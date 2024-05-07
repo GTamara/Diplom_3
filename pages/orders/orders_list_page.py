@@ -1,6 +1,3 @@
-import random
-import time
-
 from selenium.webdriver.remote.webelement import WebElement
 
 from constants.urls import Urls
@@ -22,11 +19,9 @@ class OrdersListPage(BasePage):
     def get_orders_list_page(self):
         self.driver.get(Urls.HOST + Urls.ORDERS_LIST_PATH)
         self.wait_for_orders_list_page_ready()
-        # self.wait_for_loading_animation_completed()
 
     def click_header_orders_list_link(self):
         self.click_element(HeaderLocators.ORDERS_LIST_LINK)
-        # SharedLocators.CONTENT_LOADING_PROGRESS
 
     def wait_for_orders_list_page_ready(self):
         self.wait_for_loading_animation_completed()
@@ -41,13 +36,6 @@ class OrdersListPage(BasePage):
     def check_order_num_within_popup(self, clicked_order_id: str):
         order_id_within_opened_popup = self.get_text_node(OrdersListLocators.ORDER_ID_IN_DETAILS_POPUP)
         return clicked_order_id == order_id_within_opened_popup
-
-    # def select_random_order_item_index(self):
-    #     items_list = self.driver.find_elements(*OrdersListLocators.ORDER_ITEM)
-    #     index = random.randint(
-    #         0, len(items_list) - 1
-    #     )
-    #     return index
 
     def click_random_order_item_and_get_its_id(self):
         order_item_to_click_index = self.select_random_item_index(OrdersListLocators.ORDER_ITEM)

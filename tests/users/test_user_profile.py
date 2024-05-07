@@ -12,6 +12,7 @@ class TestUserProfile:
         login_page = LoginPage(driver)
         login_page.login(user_login_valid_creds)
         user_profile_page = UserProfilePage(driver)
+        user_profile_page.wait_for_loading_animation_completed()
         user_profile_page.click_header_user_profile_link()
 
         assert user_profile_page.is_user_account_page()

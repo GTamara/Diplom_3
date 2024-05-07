@@ -1,5 +1,4 @@
 import random
-import time
 
 from selenium.webdriver import Keys, ActionChains
 from selenium.webdriver.firefox.webdriver import WebDriver
@@ -20,9 +19,6 @@ class BasePage:
         WebDriverWait(self.driver, Constants.TIMEOUT).until(
             EC.visibility_of_element_located(locator)
         )
-        # WebDriverWait(self.driver, Constants.TIMEOUT).until(
-        #     EC.visibility_of_all_elements_located(locator)
-        # )
         return self.driver.find_element(*locator)
 
     def find_element_without_wait(self, locator: tuple[str, str]):
@@ -35,9 +31,6 @@ class BasePage:
         self.find_element_with_wait(locator).click()
 
     def click_element_containing_svg_icon(self, locator: tuple[str, str]):
-
-
-
         svg_element_path = locator[1] + '/*[name()="svg"]'
         WebDriverWait(self.driver, Constants.TIMEOUT).until(
             EC.visibility_of_all_elements_located(
@@ -47,7 +40,6 @@ class BasePage:
         WebDriverWait(self.driver, Constants.TIMEOUT).until(
             EC.element_to_be_clickable(locator)
         )
-        # self.driver.execute_script('alert("gfjhgfjh")')
         element = self.find_element_with_wait(
             (locator[0], svg_element_path)
         )
@@ -90,20 +82,6 @@ class BasePage:
         self.click_element(dropdown_locator)
         self.click_element(option_locator)
 
-    def fill_datepicker_manualy(
-        self,
-        locator: tuple[str, str], 
-        value: str
-    ):
-        self.fill_text_field(locator, value)
-        self.find_element_with_wait(*locator).send_keys(Keys.ESCAPE)
-
-    def set_checkbox_value(self, locator: tuple[str, str], checked: bool):
-        checkbox = self.find_element_with_wait(locator)
-        current_value = checkbox.get_attribute('checked')
-        if bool(current_value) != checked:
-            checkbox.click()
-
     def switch_to_next_browser_tab(self):
         self.driver.switch_to.window(self.driver.window_handles[1])
 
@@ -144,8 +122,3 @@ class BasePage:
         sourceElement = self.find_element_with_wait(source)
         targetElement = self.find_element_with_wait(target)
         ActionChains(self.driver).drag_and_drop(sourceElement, targetElement).perform()
-
-    #
-    # def get_text_node_within_web_element(self, web_element: WebElement, locator: tuple[str, str]):
-    #     return web_element.find_element(*locator).text
-

@@ -38,11 +38,5 @@ class ConstructorPageLocators:
     NEW_ORDER_POPUP_ORDER_NUMBER = By.XPATH, POPUP[1] + '//h2[contains(@class, "ext_type_digits")]'
     NEW_ORDER_POPUP_ORDER_TITLE = By.XPATH, POPUP[1] + '//p[contains(text(), "идентификатор заказа")]'
 
-
-
-
-
-
-
-
+    BURGER_INGREDIENTS_SECTION = By.XPATH, '//section[contains(@class, "BurgerIngredients_ingredients")]'
 
