@@ -1,5 +1,3 @@
-import time
-
 import allure
 import pytest
 
@@ -14,8 +12,9 @@ class TestConstructorPage:
 
     @allure.title('Клик по ссылке "Конструктор" ведет на страницу оформления заказа')
     def test_click_header_constructor_link_directs_to_constructor_page(self, driver):
-        SharedMethods.get_main_page(driver)
         constructor_page = ConstructorPage(driver)
+        SharedMethods.get_main_page(driver)
+        constructor_page.wait_for_loading_animation_completed()
         constructor_page.click_constructor_header_link()
         constructor_page.wait_for_loading_animation_completed()
         constructor_page.wait_for_constructor_page_ready()

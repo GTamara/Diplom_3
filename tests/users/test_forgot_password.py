@@ -25,7 +25,7 @@ class TestForgotPasswordPage:
         forgot_password_page.get_forgot_password_page()
         forgot_password_page.fill_and_submit_forgot_password_form(None)
         reset_password_page = ResetPasswordPage(driver)
-
+        reset_password_page.wait_for_reset_password_page_ready()
         assert reset_password_page.is_reset_password_page()
 
 

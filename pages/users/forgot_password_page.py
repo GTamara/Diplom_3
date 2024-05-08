@@ -1,7 +1,5 @@
 import allure
-from selenium.webdriver.support.wait import WebDriverWait
 
-from constants.constants import Constants
 from constants.urls import Urls
 from helper_functions.shared_helper_funcs import SharedHelperFuncs
 from locators.users.forgot_password_locators import ForgotPasswordLocators

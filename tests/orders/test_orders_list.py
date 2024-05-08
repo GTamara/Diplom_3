@@ -16,6 +16,7 @@ class TestOrdersList:
     def test_click_orders_list_link_directs_to_orders_list_page(self, driver):
         SharedMethods.get_main_page(driver)
         orders_list_page = OrdersListPage(driver)
+        orders_list_page.wait_for_loading_animation_completed()
         orders_list_page.click_header_orders_list_link()
         orders_list_page.wait_for_orders_list_page_ready()
         assert orders_list_page.is_orders_list_page()

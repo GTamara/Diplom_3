@@ -1,11 +1,8 @@
 import allure
-from selenium.webdriver.remote.webelement import WebElement
 
 from constants.urls import Urls
 from locators.header_locators import HeaderLocators
-from locators.orders.constructor_page_locators import ConstructorPageLocators
 from locators.orders.orders_list_locators import OrdersListLocators
-from locators.shared_locators import SharedLocators
 from pages.base_page import BasePage
 
 

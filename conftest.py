@@ -3,7 +3,7 @@ from typing import Generator, Any
 import allure
 import pytest
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options as ChromeOptions, Options
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
 from helper_functions.shared_methods import SharedMethods
@@ -15,7 +15,7 @@ def firefox_driver():
     options.add_argument('--window-size=1920, 1080')
     with allure.step('Открыть окно Firefox браузера'):
         driver = webdriver.Firefox(options=options)
-        driver.maximize_window()
+        # driver.maximize_window()
     yield driver
     with allure.step('Закрыть окно Firefox браузера'):
         driver.quit()
@@ -23,7 +23,7 @@ def firefox_driver():
 
 @pytest.fixture(scope="function")
 def chrome_driver():
-    options = Options()
+    options = ChromeOptions()
     options.add_argument('--window-size=1920, 1080')
     driver = webdriver.Chrome(options=options)
     yield driver
@@ -35,7 +35,7 @@ def chrome_driver():
     scope="function",
     params=[
         'firefox_driver',
-        # 'chrome_driver',
+        'chrome_driver',
     ]
 )
 def driver(request):

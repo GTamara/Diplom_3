@@ -1,31 +1,26 @@
 import allure
 
-from constants.urls import Urls
 from helper_functions.shared_helper_funcs import SharedHelperFuncs
 from locators.users.reset_password_locators import ResetPasswordLocators
 from pages.base_page import BasePage
-#
 
 
 class ResetPasswordPage(BasePage):
 
     @allure.step('Подождать, пока страница восстановления пароля загрузится')
     def wait_for_reset_password_page_ready(self):
-        self.find_element_with_wait(ResetPasswordLocators.PAGE_HEADING)
+        # self.find_element_with_wait(ResetPasswordLocators.PAGE_HEADING)
         self.find_element_with_wait(ResetPasswordLocators.RESET_PASSWORD_BTN)
         self.find_element_with_wait(ResetPasswordLocators.LOGIN_LINK)
+        self.wait_for_loading_animation_completed()
+        self.wait_for_loading_progress_completed()
 
     @allure.step('Проверить, что текущая страница - страница восстановления пароля')
     def is_reset_password_page(self):
-        x = self.get_text_node(
+        page_title = self.get_text_node(
             ResetPasswordLocators.PAGE_HEADING
-        ) == 'Восстановление пароля'
-        return (
-            self.get_text_node(
-                ResetPasswordLocators.PAGE_HEADING
-            ) == 'Восстановление пароля'
-            and '/reset-password' in self.driver.current_url
         )
+        return page_title == 'Восстановление пароля' and '/reset-password' in self.driver.current_url
 
     @allure.step('Заполнить поле для пароля')
     def fill_password_field(self, password_value: str | None):

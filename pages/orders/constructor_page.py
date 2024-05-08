@@ -1,12 +1,9 @@
 import allure
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from constants.constants import Constants
 from constants.urls import Urls
-from locators.orders.constructor_page_locators import ConstructorPageLocators
-from locators.header_locators import HeaderLocators
 from locators.shared_locators import SharedLocators
 from locators.orders.constructor_page_locators import ConstructorPageLocators
 from locators.header_locators import HeaderLocators
@@ -31,6 +28,7 @@ class ConstructorPage(BasePage):
     @allure.step('Кликнуть ссылку "Конструктор"')
     def click_constructor_header_link(self):
         self.click_element(HeaderLocators.CONSTRUCTOR_LINK)
+        self.wait_for_constructor_page_ready()
 
     @allure.step('Проверить, что текущая страница - "Конструктор"')
     def is_constructor_page(self):

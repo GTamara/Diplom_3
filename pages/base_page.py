@@ -1,6 +1,6 @@
 import random
 
-from selenium.webdriver import Keys, ActionChains
+from selenium.webdriver import ActionChains
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
@@ -121,7 +121,7 @@ class BasePage:
         sourceElement = self.find_element_with_wait(source)
         targetElement = self.find_element_with_wait(target)
         ActionChains(self.driver).drag_and_drop(sourceElement, targetElement).perform()
-        ActionChains(self.driver).click_and_hold(sourceElement).move_to_element(targetElement)
+        # ActionChains(self.driver).click_and_hold(sourceElement).move_to_element(targetElement)
 
     def drag_and_drop_by_javascript(self, source: tuple[str, str], target: tuple[str, str]):
         sourceElement = self.find_element_with_wait(source)
@@ -142,5 +142,4 @@ class BasePage:
         + "dispatchEvent(element, dragEndEvent,dropEvent.dataTransfer);\n" + "}\n" + "\n" \
         + "var source = arguments[0];\n" + "var destination = arguments[1];\n" \
         + "simulateHTML5DragAndDrop(source,destination);"
-        print(script_str)
         self.driver.execute_script(script_str, sourceElement, targetElement)
