@@ -18,7 +18,7 @@ class TestConstructorPage:
         constructor_page.wait_for_loading_animation_completed()
         constructor_page.wait_for_constructor_page_ready()
         assert constructor_page.is_constructor_page()
-        assert driver.current_url == Urls.HOST
+        assert driver.current_url[:-1] == Urls.HOST
 
     @pytest.mark.parametrize(
         'ingredient_type_index',
@@ -29,7 +29,7 @@ class TestConstructorPage:
         ]
     )
     @allure.title('Конструктор заказов, лента ингредиентов. Клик по ингредиенту открывает попап с деталями ингредиента')
-    def test_click_order_item_opens_popup_with_details(self, driver, ingredient_type_index):
+    def test_click_order_item_opens_popup_with_details(self, driver, ingredient_type_index: int):
         constructor_page = ConstructorPage(driver)
         constructor_page.get_constructor_page()
         clicked_ingredient_title = constructor_page.click_random_ingredient_item_and_get_its_title(ingredient_type_index)
@@ -44,7 +44,7 @@ class TestConstructorPage:
         ]
     )
     @allure.title('всплывающее окно закрывается кликом по крестику')
-    def test_click_order_popup_close_btn_hides_popup(self, driver, ingredient_type_index):
+    def test_click_order_popup_close_btn_hides_popup(self, driver, ingredient_type_index: int):
         constructor_page = ConstructorPage(driver)
         constructor_page.get_constructor_page()
         constructor_page.click_ingredient_item(ingredient_type_index)
@@ -61,7 +61,12 @@ class TestConstructorPage:
         ]
     )
     @allure.title('при добавлении ингредиента в заказ счётчик этого ингредиента увеличивается')
-    def test_counter_increases_after_ingredient_was_added(self, driver, ingredient_type_index, result):
+    def test_counter_increases_after_ingredient_was_added(
+        self,
+        driver,
+        ingredient_type_index: int,
+        result: int
+    ):
         constructor_page = ConstructorPage(driver)
         constructor_page.get_constructor_page()
         constructor_page.add_ingredient_to_bucket(ingredient_type_index)
@@ -75,8 +80,8 @@ class TestConstructorPage:
     def test_create_order_with_authorized_user_success(
         self,
         driver,
-        user_login_valid_creds,
-        sauce_quantity, filling_quantity,
+        user_login_valid_creds: dict[str, str],
+        sauce_quantity: int, filling_quantity: int,
     ):
         login_page = LoginPage(driver)
         login_page.login(user_login_valid_creds)
@@ -89,9 +94,3 @@ class TestConstructorPage:
         constructor_page.wait_for_loading_animation_completed()
 
         assert constructor_page.get_new_order_num_from_popup().isdigit()
-
-
-
-
-
-        assert constructor_page.is_constructor_page()

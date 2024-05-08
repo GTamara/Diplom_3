@@ -1,10 +1,13 @@
+import allure
+
 from pages.users.login_page import LoginPage
 from pages.users.user_profile_page import UserProfilePage
 
 
 class TestUserProfile:
 
-    def test_click_user_account_link_directs_to_user_account(
+    @allure.title('Клик по ссылке «Личный кабинет» осуществляет переход в раздел «Личный кабинет»')
+    def test_click_user_account_link_directs_to_user_profile(
         self,
         driver,
         user_login_valid_creds
@@ -17,6 +20,7 @@ class TestUserProfile:
 
         assert user_profile_page.is_user_account_page()
 
+    @allure.title('Клик по ссылке «История заказов» осуществляет переход в раздел «История заказов»')
     def test_click_account_history_link_directs_to_account_history(
         self,
         driver,
@@ -30,6 +34,7 @@ class TestUserProfile:
 
         assert user_profile_page.is_order_history_page()
 
+    @allure.title('Клик по кнопке "Выход" осуществляет выход из аккаунта')
     def test_logout(
         self,
         driver,

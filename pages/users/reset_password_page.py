@@ -13,6 +13,9 @@ class ResetPasswordPage(BasePage):
         self.find_element_with_wait(ResetPasswordLocators.LOGIN_LINK)
 
     def is_reset_password_page(self):
+        x = self.get_text_node(
+            ResetPasswordLocators.PAGE_HEADING
+        ) == 'Восстановление пароля'
         return (
             self.get_text_node(
                 ResetPasswordLocators.PAGE_HEADING

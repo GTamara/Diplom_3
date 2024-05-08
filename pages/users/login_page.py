@@ -24,7 +24,7 @@ class LoginPage(BasePage):
     def click_forgot_password_link(self):
         self.click_element(LoginPageLocators.FORGOT_PASSWORD_LINK)
 
-    def login(self, creds):
+    def login(self, creds: dict[str, str]) -> None :
         self.get_login_page()
         self.fill_text_field(
             LoginPageLocators.EMAIL_FIELD,

@@ -50,7 +50,6 @@ class BasePage:
         self.driver.execute_script("arguments[0].scrollIntoView();", element)
 
     def scroll_to_web_element(self, element: WebElement):
-        # element = self.driver.find_element(*locator)
         self.driver.execute_script("arguments[0].scrollIntoView();", element)
 
     @staticmethod
@@ -97,7 +96,7 @@ class BasePage:
             EC.invisibility_of_element_located(SharedLocators.LOADING_ANIMATION)
         )
 
-    def wait_until_element_disappears(self, locator):
+    def wait_until_element_disappears(self, locator: tuple[str, str]):
         WebDriverWait(self.driver, Constants.TIMEOUT).until(
             EC.invisibility_of_element_located(locator)
         )
@@ -111,14 +110,14 @@ class BasePage:
                 EC.visibility_of_all_elements_located(locator)
             )
 
-    def select_random_item_index(self, locator):
+    def select_random_item_index(self, locator: tuple[str, str]):
         items_list = self.driver.find_elements(*locator)
         index = random.randint(
             0, len(items_list) - 1
         )
         return index
 
-    def drag_and_drop_element(self, source, target):
+    def drag_and_drop_element(self, source: tuple[str, str], target: tuple[str, str]):
         sourceElement = self.find_element_with_wait(source)
         targetElement = self.find_element_with_wait(target)
         ActionChains(self.driver).drag_and_drop(sourceElement, targetElement).perform()

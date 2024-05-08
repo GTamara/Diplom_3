@@ -1,9 +1,12 @@
+import allure
+
 from pages.users.forgot_password_page import ForgotPasswordPage
 from pages.users.reset_password_page import ResetPasswordPage
 
 
 class TestResetPasswordPage:
 
+    @allure.title('клик по кнопке показать/скрыть пароль делает поле активным — подсвечивает его')
     def test_check_toggle_visibility_icons_toggles_text_visibility(self, driver):
         forgot_password_page = ForgotPasswordPage(driver)
         forgot_password_page.get_forgot_password_page()

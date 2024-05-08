@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -22,6 +23,7 @@ class ConstructorPage(BasePage):
             'index': -1,
         }
 
+    @allure.step('Открыть главную страницу')
     def get_constructor_page(self):
         self.driver.get(Urls.HOST)
         self.wait_for_constructor_page_ready()
@@ -81,7 +83,7 @@ class ConstructorPage(BasePage):
         ingredient_title_within_opened_popup = self.get_text_node(ConstructorPageLocators.INGREDIENT_TITLE_WITHIN_POPUP)
         return ingredient_title_within_opened_popup == clicked_ingredient_title
 
-    def click_ingredient_item(self, category_index):
+    def click_ingredient_item(self, category_index: int):
         formatted_item_locator = self.get_random_ingredient(category_index)['locator']
         self.click_element(formatted_item_locator)
 
@@ -98,7 +100,7 @@ class ConstructorPage(BasePage):
         self.wait_until_element_disappears(ConstructorPageLocators.POPUP)
         return True
 
-    def add_ingredient_to_bucket(self, category_index):
+    def add_ingredient_to_bucket(self, category_index: int):
         self.selected_ingredient_locator = self.get_random_ingredient(category_index)
         formatted_item_locator = self.selected_ingredient_locator['locator']
         self.drag_and_drop_element(
@@ -118,7 +120,7 @@ class ConstructorPage(BasePage):
             self.get_text_node(selected_ingredient_counter_locator)
         )
 
-    def create_order(self, sauce_quantity, filling_quantity):
+    def create_order(self, sauce_quantity: int, filling_quantity: int):
         self.add_ingredient_to_bucket(1)
         for i in range(sauce_quantity):
             self.add_ingredient_to_bucket(2)
@@ -128,7 +130,7 @@ class ConstructorPage(BasePage):
         self.wait_for_loading_animation_completed()
         self.wait_for_loading_progress_completed()
 
-    def create_orders_list(self, list_for_creating_orders):
+    def create_orders_list(self, list_for_creating_orders: list[tuple[int, int]]):
         self.wait_for_constructor_page_ready()
         for i in list_for_creating_orders:
             self.create_order(i[0], i[1])

@@ -54,7 +54,7 @@ class TestOrdersList:
     def test_user_orders_present_on_orders_list_page(
             self,
             driver,
-            user_login_valid_creds,
+            user_login_valid_creds: dict[str, str],
             list_for_creating_orders,
     ):
         login_page = LoginPage(driver)
@@ -86,8 +86,8 @@ class TestOrdersList:
     def test_all_time_completed_counter_increases_after_new_order_created(
         self,
         driver,
-        user_login_valid_creds,
-        list_for_creating_orders,
+        user_login_valid_creds: dict[str, str],
+        list_for_creating_orders: list[tuple[int, int]],
     ):
         orders_list_page = OrdersListPage(driver)
         orders_list_page.get_orders_list_page()
@@ -114,8 +114,8 @@ class TestOrdersList:
     def test_all_time_completed_counter_increases_after_new_order_created(
         self,
         driver,
-        user_login_valid_creds,
-        list_for_creating_orders,
+        user_login_valid_creds: dict[str, str],
+        list_for_creating_orders: list[tuple[int, int]],
     ):
         orders_list_page = OrdersListPage(driver)
         orders_list_page.get_orders_list_page()
@@ -142,8 +142,8 @@ class TestOrdersList:
     def test_just_now_created_order_have_status_in_progress(
         self,
         driver,
-        user_login_valid_creds,
-        sauce_quantity, filling_quantity
+        user_login_valid_creds: dict[str, str],
+        sauce_quantity: int, filling_quantity: int
     ):
         login_page = LoginPage(driver)
         login_page.login(user_login_valid_creds)
