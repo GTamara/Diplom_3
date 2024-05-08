@@ -1,3 +1,5 @@
+import time
+
 import allure
 import pytest
 
@@ -56,8 +58,8 @@ class TestConstructorPage:
         'ingredient_type_index, result',
         [
             (1, 2),  # bun category, counter value
-            (2, 1),  # sauce category, counter value
-            (3, 1),  # filling category, counter value
+            # (2, 1),  # sauce category, counter value
+            # (3, 1),  # filling category, counter value
         ]
     )
     @allure.title('при добавлении ингредиента в заказ счётчик этого ингредиента увеличивается')

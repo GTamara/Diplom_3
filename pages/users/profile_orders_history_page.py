@@ -1,3 +1,5 @@
+import allure
+
 from locators.users.profile_orders_history_locators import OrdersProfileHistoryLocators
 from pages.base_page import BasePage
 
@@ -16,9 +18,7 @@ class ProfileOrdersHistoryPage(BasePage):
     def orders_quantity(self) -> int:
         return self.__orders_quantity
 
-    # def get_orders_quantity(self):
-    #     return len(self.order_elements_list)
-
+    @allure.step('Получить список номеров заказов пользователя')
     def get_order_numbers_list(self) -> list[str]:
         order_numbers_list = []
         for order in range(self.orders_quantity):

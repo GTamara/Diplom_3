@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.support.wait import WebDriverWait
 
 from constants.constants import Constants
@@ -10,10 +11,12 @@ from pages.base_page import BasePage
 
 class ForgotPasswordPage(BasePage):
 
+    @allure.step('Открыть страницу "Забыли пароль"')
     def get_forgot_password_page(self):
         self.driver.get(Urls.HOST + Urls.FORGOT_PASSWORD_PAGE_PATH)
         self.wait_for_loading_animation_completed()
 
+    @allure.step('Заполнить форму "Забыли пароль" и кликнуть кнопку')
     def fill_and_submit_forgot_password_form(self, email_value: str | None):
         if not email_value:
             email_value = SharedHelperFuncs().generate_random_email()
@@ -23,6 +26,7 @@ class ForgotPasswordPage(BasePage):
         )
         self.click_element(ForgotPasswordLocators.FORGOT_PASSWORD_BTN)
 
+    @allure.step('Проверить, что текущая страница - "Забыли пароль"')
     def is_forgot_password_page(self):
         page_title = self.get_text_node(
             ForgotPasswordLocators.PAGE_HEADING

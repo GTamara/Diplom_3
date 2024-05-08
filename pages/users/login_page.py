@@ -1,3 +1,5 @@
+import allure
+
 from constants.urls import Urls
 from locators.users.login_page_locators import LoginPageLocators
 from pages.base_page import BasePage
@@ -5,10 +7,12 @@ from pages.base_page import BasePage
 
 class LoginPage(BasePage):
 
+    @allure.step('Открыть страницу авторизации')
     def get_login_page(self):
         self.driver.get(Urls.HOST + Urls.LOGIN_PAGE_PATH)
         self.wait_for_loading_animation_completed()
 
+    @allure.step('Проверить, что текущая страница - страница авторизации')
     def is_login_page(self):
         page_title = self.get_text_node(
             LoginPageLocators.PAGE_HEADING
@@ -18,13 +22,14 @@ class LoginPage(BasePage):
         x = '/login' in self.driver.current_url
         return page_title == 'Вход' \
             and '/login' in self.driver.current_url \
-            and  is_login_btn
+            and is_login_btn
 
-
+    @allure.step('Кликнуть ссылку "Восстановить пароль"')
     def click_forgot_password_link(self):
         self.click_element(LoginPageLocators.FORGOT_PASSWORD_LINK)
 
-    def login(self, creds: dict[str, str]) -> None :
+    @allure.step('Заполнить форму авторизации и кликнуть кнопку')
+    def login(self, creds: dict[str, str]) -> None:
         self.get_login_page()
         self.fill_text_field(
             LoginPageLocators.EMAIL_FIELD,

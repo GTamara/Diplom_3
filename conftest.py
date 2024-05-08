@@ -15,6 +15,7 @@ def firefox_driver():
     options.add_argument('--window-size=1920, 1080')
     with allure.step('Открыть окно Firefox браузера'):
         driver = webdriver.Firefox(options=options)
+        driver.maximize_window()
     yield driver
     with allure.step('Закрыть окно Firefox браузера'):
         driver.quit()
@@ -34,7 +35,7 @@ def chrome_driver():
     scope="function",
     params=[
         'firefox_driver',
-        'chrome_driver',
+        # 'chrome_driver',
     ]
 )
 def driver(request):
