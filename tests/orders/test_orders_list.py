@@ -73,11 +73,11 @@ class TestOrdersList:
         profile_order_numbers_list = profile_orders_history_page.get_order_numbers_list()
         orders_list_page = OrdersListPage(driver)
         all_order_numbers_list = orders_list_page.get_all_order_numbers_list()
-        # Проверить, что нет задвоенных заказов
-        assert len(all_order_numbers_list) == len(list(set(all_order_numbers_list)))
+        with allure.step('Проверить, что нет задвоенных заказов'):
+            assert len(all_order_numbers_list) == len(list(set(all_order_numbers_list)))
         for i in profile_order_numbers_list:
-            # проверить, что заказ {i} есть в листе всех заказов
-            assert i in all_order_numbers_list
+            with allure.step('проверить, что заказ {i} есть в листе всех заказов'):
+                assert i in all_order_numbers_list
 
     @pytest.mark.parametrize(
         'list_for_creating_orders',
@@ -92,19 +92,21 @@ class TestOrdersList:
     ):
         orders_list_page = OrdersListPage(driver)
         orders_list_page.get_orders_list_page()
-        # получить начальное значение счетчика
-        initial_counter_value = int(
-            orders_list_page.get_completed_orders_counter_value('all_time')
-        )
+        with allure.step('Получить начальное значение счетчика'):
+            initial_counter_value = int(
+                orders_list_page.get_completed_orders_counter_value('all_time')
+            )
         login_page = LoginPage(driver)
         login_page.login(user_login_valid_creds)
         constructor_page = ConstructorPage(driver)
         constructor_page.create_orders_list(list_for_creating_orders)
-        # получить конечное значение счетчика после создания заказов
+        constructor_page.get_constructor_page()
+        constructor_page.wait_for_constructor_page_ready()
         orders_list_page.get_orders_list_page()
-        actual_counter_value = int(
-            orders_list_page.get_completed_orders_counter_value('all_time''all_time')
-        )
+        with allure.step('Получить конечное значение счетчика после создания заказов'):
+            actual_counter_value = int(
+                orders_list_page.get_completed_orders_counter_value('all_time')
+            )
         assert actual_counter_value - initial_counter_value == len(list_for_creating_orders)
 
     @pytest.mark.parametrize(
@@ -112,7 +114,7 @@ class TestOrdersList:
         test_orders_list
     )
     @allure.title('при создании нового заказа счётчик Выполнено за сегодня увеличивается')
-    def test_all_time_completed_counter_increases_after_new_order_created(
+    def test_today_completed_counter_increases_after_new_order_created(
         self,
         driver,
         user_login_valid_creds: dict[str, str],
@@ -120,24 +122,26 @@ class TestOrdersList:
     ):
         orders_list_page = OrdersListPage(driver)
         orders_list_page.get_orders_list_page()
-        # получить начальное значение счетчика
-        initial_counter_value = int(
-            orders_list_page.get_completed_orders_counter_value('today')
-        )
+        with allure.step('получить начальное значение счетчика'):
+            initial_counter_value = int(
+                orders_list_page.get_completed_orders_counter_value('today')
+            )
         login_page = LoginPage(driver)
         login_page.login(user_login_valid_creds)
         constructor_page = ConstructorPage(driver)
         constructor_page.create_orders_list(list_for_creating_orders)
-        # получить конечное значение счетчика после создания заказов
+        constructor_page.get_constructor_page()
+        constructor_page.wait_for_constructor_page_ready()
         orders_list_page.get_orders_list_page()
-        actual_counter_value = int(
-            orders_list_page.get_completed_orders_counter_value('today')
-        )
+        with allure.step('Получить конечное значение счетчика после создания заказов'):
+            actual_counter_value = int(
+                orders_list_page.get_completed_orders_counter_value('today')
+            )
         assert actual_counter_value - initial_counter_value == len(list_for_creating_orders)
 
     @pytest.mark.parametrize(
         'sauce_quantity, filling_quantity',
-        test_orders_list[len(test_orders_list) - 1]
+        *test_orders_list[-1:]
     )
     @allure.title('при создании нового заказа счётчик Выполнено за сегодня увеличивается')
     def test_just_now_created_order_have_status_in_progress(

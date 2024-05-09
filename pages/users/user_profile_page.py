@@ -11,6 +11,7 @@ class UserProfilePage(BasePage):
     def click_header_user_profile_link(self):
         self.click_element(HeaderLocators.USER_PROFILE_LINK)
         self.wait_for_loading_animation_completed()
+        self.wait_for_loading_progress_completed()
 
     @allure.step('Кликнуть ссылку "История заказов"')
     def click_order_history_link(self):
