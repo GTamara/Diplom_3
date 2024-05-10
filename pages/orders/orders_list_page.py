@@ -104,6 +104,14 @@ class OrdersListPage(BasePage):
     def get_in_progress_order_num(self):
         return self.find_element_with_wait(OrdersListLocators.IN_PROGRESS_ORDER_NUM).text
 
+    @allure.step('Получить номер текущего заказа в прогрессе')
+    def wait_until_inprogress_order_num_is_present_on_inprogress_section(self, expected_order_num):
+        self.wait_until_element_has_value(
+            OrdersListLocators.IN_PROGRESS_ORDER_NUM,
+            expected_order_num
+        )
+        return True
+
 
 
 

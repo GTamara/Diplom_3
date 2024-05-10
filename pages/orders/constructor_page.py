@@ -157,6 +157,7 @@ class ConstructorPage(BasePage):
     def get_new_order_num_from_popup(self):
         self.find_element_with_wait(ConstructorPageLocators.POPUP)
         self.find_element_with_wait(ConstructorPageLocators.NEW_ORDER_POPUP_ORDER_TITLE)
+        self.wait_for_loading_animation_completed()
         order_number = self.find_element_with_wait(ConstructorPageLocators.NEW_ORDER_POPUP_ORDER_NUMBER).text
         return order_number
 

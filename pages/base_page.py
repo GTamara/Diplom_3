@@ -72,10 +72,10 @@ class BasePage:
 
     def fill_text_field(self, locator: tuple[str, str], value):
         return self.find_element_with_wait(locator).send_keys(value)
-    
+
     def fill_dropdown(
-        self, 
-        dropdown_locator: tuple[str, str], 
+        self,
+        dropdown_locator: tuple[str, str],
         option_locator: tuple[str, str]
     ):
         self.click_element(dropdown_locator)
@@ -143,3 +143,10 @@ class BasePage:
         + "var source = arguments[0];\n" + "var destination = arguments[1];\n" \
         + "simulateHTML5DragAndDrop(source,destination);"
         self.driver.execute_script(script_str, sourceElement, targetElement)
+
+    def wait_until_element_has_value(self, locator, expected_value):
+        WebDriverWait(self.driver, Constants.TIMEOUT).until(
+            EC.text_to_be_present_in_element(locator, expected_value)
+        )
+
+

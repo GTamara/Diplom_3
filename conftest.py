@@ -35,7 +35,7 @@ def chrome_driver():
     scope="function",
     params=[
         'firefox_driver',
-        # 'chrome_driver',
+        'chrome_driver',
     ]
 )
 def driver(request):
