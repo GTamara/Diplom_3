@@ -1,10 +1,9 @@
-# sprint_6
-
+# UI тесты
 ## Установка зависимостей
 pip install -r requirements.txt 
 
 ## Генерация отчета
-pytest tests.py --alluredir=allure_results 
+pytest --alluredir=allure_results 
 allure serve allure_results
 
 ## Генерация актуального requirements.txt

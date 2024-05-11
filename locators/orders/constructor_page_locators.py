@@ -4,7 +4,6 @@ from selenium.webdriver.common.by import By
 class ConstructorPageLocators:
 
     PAGE_HEADING = By.XPATH, '//h1[text()="Соберите бургер"]'
-    # LOGIN_LINK = By.XPATH, '//a[@href="/login"]'
 
     BURGER_INGREDIENT = By.XPATH, '//a[contains(@class, "BurgerIngredient_ingredient")]'
     BURGER_INGREDIENT_IMAGE = By.XPATH, BURGER_INGREDIENT[1] + '/img'
@@ -22,7 +21,6 @@ class ConstructorPageLocators:
 
     INGREDIENT_ITEM = By.XPATH, SPECIFIED_INGREDIENT_SECTION[1] + '//a[contains(@class, "BurgerIngredient_ingredient_")]'
     INDEXED_INGREDIENT_ITEM = By.XPATH, INGREDIENT_ITEM[1] + '[{}]'
-    # INDEXED_INGREDIENT_ITEM_TITLE = By.XPATH, INDEXED_INGREDIENT_ITEM[1] + '/p[contains(@class, "BurgerIngredient_ingredient__text_")]'
 
     POPUP = By.XPATH, '//section[contains(@class, "Modal_modal_opened_")]'
     INGREDIENT_TITLE_WITHIN_POPUP = By.XPATH, POPUP[1] + '//p[contains(@class, "text_type_main")]'

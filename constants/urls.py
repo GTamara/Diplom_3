@@ -4,5 +4,3 @@ class Urls:
     FORGOT_PASSWORD_PAGE_PATH = '/forgot-password'
     RESET_PASSWORD_PAGE_PATH = '/reset-password'
     ORDERS_LIST_PATH = '/feed'
-
-    # ORDER_PAGE_URL = MAIN_PAGE_URL + '/order'

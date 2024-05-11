@@ -8,8 +8,6 @@ class UserProfileLocators:
 
     USER_DATA_FORM = By.XPATH, '//ul[contains(@class, "_profileList_")]'
     ORDER_HISTORY_LIST = By.XPATH, '//ul[contains(@class, "OrderHistory_profileList_")]'
-    # ORDER_HISTORY_CONTAINER = By.XPATH, \
-    #     '//div[contains(@class, "Account_contentBox_")]/div[contains(@class, "OrderHistory_orderHistory")]'
     ORDER_HISTORY_CONTAINER = By.XPATH, \
         '//div[contains(@class, "OrderHistory_orderHistory")]'
     LOGOUT_BUTTON = By.XPATH, '//button[text()="Выход"]'
