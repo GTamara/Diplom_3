@@ -1,16 +1,12 @@
 import allure
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
-from constants.constants import Constants
 from constants.urls import Urls
 from locators.shared_locators import SharedLocators
 from locators.orders.constructor_page_locators import ConstructorPageLocators
-from locators.header_locators import HeaderLocators
-from pages.base_page import BasePage
+from pages.shared_elements_page import SharedElementsPage
 
 
-class ConstructorPage(BasePage):
+class ConstructorPage(SharedElementsPage):
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -22,12 +18,7 @@ class ConstructorPage(BasePage):
 
     @allure.step('Открыть главную страницу')
     def get_constructor_page(self):
-        self.driver.get(Urls.HOST)
-        self.wait_for_constructor_page_ready()
-
-    @allure.step('Кликнуть ссылку "Конструктор"')
-    def click_constructor_header_link(self):
-        self.click_element(HeaderLocators.CONSTRUCTOR_LINK)
+        self.get_page_by_url(Urls.HOST)
         self.wait_for_constructor_page_ready()
 
     @allure.step('Проверить, что текущая страница - "Конструктор"')
@@ -36,16 +27,11 @@ class ConstructorPage(BasePage):
 
     @allure.step('Подождать, пока страница конструктора загрузится')
     def wait_for_constructor_page_ready(self):
-        self.wait_for_all_elements_loaded(ConstructorPageLocators.BURGER_INGREDIENT_IMAGE)
+        self.wait_until_all_elements_loaded(ConstructorPageLocators.BURGER_INGREDIENT_IMAGE)
 
     @allure.step('Подождать, пока элементы попапа станут кликабельными')
     def wait_for_popup_ready(self):
-        # подождать, пока все элементы попапа загрузятся и кнопка закрытия попапа будет доступна для клика
-        WebDriverWait(self.driver, Constants.TIMEOUT).until(
-            EC.invisibility_of_element(
-                SharedLocators.POPUP_OVERLAY
-            )
-        )
+        self.wait_until_element_disappears(SharedLocators.POPUP_OVERLAY)
         self.find_element_with_wait(ConstructorPageLocators.POPUP_CLOSE_BTN)
 
     @allure.step('Выбрать случайный ингредиент из раздела {category_index}')
@@ -113,10 +99,6 @@ class ConstructorPage(BasePage):
     def add_ingredient_to_bucket(self, category_index: int):
         self.selected_ingredient_locator = self.get_random_ingredient(category_index)
         formatted_item_locator = self.selected_ingredient_locator['locator']
-        # self.drag_and_drop_element(
-        #     formatted_item_locator,
-        #     ConstructorPageLocators.BURGER_CONSTRUCTOR_BUCKET
-        # )
         self.drag_and_drop_by_javascript(
             formatted_item_locator,
             ConstructorPageLocators.BURGER_CONSTRUCTOR_BUCKET

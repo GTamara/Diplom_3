@@ -3,7 +3,8 @@ import pytest
 
 from constants.urls import Urls
 from data.orders_data import test_orders_list
-from helper_functions.shared_methods import SharedMethods
+from helper_functions.shared_ui_methods import SharedUiMethods
+from pages.header_page import HeaderPage
 from pages.orders.constructor_page import ConstructorPage
 from pages.users.login_page import LoginPage
 
@@ -13,9 +14,9 @@ class TestConstructorPage:
     @allure.title('Клик по ссылке "Конструктор" ведет на страницу оформления заказа')
     def test_click_header_constructor_link_directs_to_constructor_page(self, driver):
         constructor_page = ConstructorPage(driver)
-        SharedMethods.get_main_page(driver)
+        SharedUiMethods.get_main_page(driver)
         constructor_page.wait_for_loading_animation_completed()
-        constructor_page.click_constructor_header_link()
+        HeaderPage(driver).click_header_constructor_link()
         constructor_page.wait_for_loading_animation_completed()
         constructor_page.wait_for_constructor_page_ready()
         assert constructor_page.is_constructor_page()

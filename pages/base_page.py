@@ -2,18 +2,19 @@ import random
 
 from selenium.webdriver import ActionChains
 from selenium.webdriver.firefox.webdriver import WebDriver
-from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 from constants.constants import Constants
-from locators.shared_locators import SharedLocators
 
 
 class BasePage:
 
     def __init__(self, driver: WebDriver):
         self.driver = driver
+
+    def get_page_by_url(self, url: str):
+        self.driver.get(url)
 
     def find_element_with_wait(self, locator: tuple[str, str]):
         WebDriverWait(self.driver, Constants.TIMEOUT).until(
@@ -32,11 +33,7 @@ class BasePage:
 
     def click_element_containing_svg_icon(self, locator: tuple[str, str]):
         svg_element_path = locator[1] + '/*[name()="svg"]'
-        WebDriverWait(self.driver, Constants.TIMEOUT).until(
-            EC.visibility_of_all_elements_located(
-                (locator[0], svg_element_path)
-            )
-        )
+        self.wait_until_all_elements_loaded((locator[0], svg_element_path))
         WebDriverWait(self.driver, Constants.TIMEOUT).until(
             EC.element_to_be_clickable(locator)
         )
@@ -47,9 +44,6 @@ class BasePage:
 
     def scroll_to_element(self, locator: tuple[str, str]):
         element = self.driver.find_element(*locator)
-        self.driver.execute_script("arguments[0].scrollIntoView();", element)
-
-    def scroll_to_web_element(self, element: WebElement):
         self.driver.execute_script("arguments[0].scrollIntoView();", element)
 
     @staticmethod
@@ -67,7 +61,6 @@ class BasePage:
         return method, formatted_locator
 
     def get_text_node(self, locator: tuple[str, str]):
-        x = self.find_element_with_wait(locator).text
         return self.find_element_with_wait(locator).text
 
     def fill_text_field(self, locator: tuple[str, str], value):
@@ -91,24 +84,21 @@ class BasePage:
     def are_elements_present_on_page(self, locator: tuple[str, str]):
         return len(self.driver.find_elements(*locator)) > 0
 
-    def wait_for_loading_animation_completed(self):
-        WebDriverWait(self.driver, Constants.TIMEOUT).until(
-            EC.invisibility_of_element_located(SharedLocators.LOADING_ANIMATION)
-        )
-
     def wait_until_element_disappears(self, locator: tuple[str, str]):
         WebDriverWait(self.driver, Constants.TIMEOUT).until(
             EC.invisibility_of_element_located(locator)
         )
 
-    def wait_for_loading_progress_completed(self):
-        self.wait_until_element_disappears(SharedLocators.CONTENT_LOADING_PROGRESS)
-
-    def wait_for_all_elements_loaded(self, locator: tuple[str, str]):
+    def wait_until_all_elements_loaded(self, locator: tuple[str, str]):
         WebDriverWait(self.driver, 30). \
             until(
                 EC.visibility_of_all_elements_located(locator)
             )
+
+    def wait_until_element_has_value(self, locator, expected_value):
+        WebDriverWait(self.driver, Constants.TIMEOUT).until(
+            EC.text_to_be_present_in_element(locator, expected_value)
+        )
 
     def select_random_item_index(self, locator: tuple[str, str]):
         items_list = self.driver.find_elements(*locator)
@@ -144,9 +134,5 @@ class BasePage:
         + "simulateHTML5DragAndDrop(source,destination);"
         self.driver.execute_script(script_str, sourceElement, targetElement)
 
-    def wait_until_element_has_value(self, locator, expected_value):
-        WebDriverWait(self.driver, Constants.TIMEOUT).until(
-            EC.text_to_be_present_in_element(locator, expected_value)
-        )
 
 

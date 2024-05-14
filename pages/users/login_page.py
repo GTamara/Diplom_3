@@ -2,14 +2,14 @@ import allure
 
 from constants.urls import Urls
 from locators.users.login_page_locators import LoginPageLocators
-from pages.base_page import BasePage
+from pages.shared_elements_page import SharedElementsPage
 
 
-class LoginPage(BasePage):
+class LoginPage(SharedElementsPage):
 
     @allure.step('Открыть страницу авторизации')
     def get_login_page(self):
-        self.driver.get(Urls.HOST + Urls.LOGIN_PAGE_PATH)
+        self.get_page_by_url(Urls.HOST + Urls.LOGIN_PAGE_PATH)
         self.wait_for_loading_animation_completed()
 
     @allure.step('Проверить, что текущая страница - страница авторизации')
@@ -19,9 +19,8 @@ class LoginPage(BasePage):
         )
         is_login_btn = \
             self.are_elements_present_on_page(LoginPageLocators.LOGIN_BUTTON)
-        x = '/login' in self.driver.current_url
         return page_title == 'Вход' \
-            and '/login' in self.driver.current_url \
+            and Urls.LOGIN_PAGE_PATH in self.driver.current_url \
             and is_login_btn
 
     @allure.step('Кликнуть ссылку "Восстановить пароль"')

@@ -31,6 +31,9 @@ class TestUserProfile:
         user_profile_page = UserProfilePage(driver)
         user_profile_page.click_header_user_profile_link()
         user_profile_page.click_order_history_link()
+        with allure.step('Подождать пока закончится анимация загрузки страницы'):
+            user_profile_page.wait_for_loading_animation_completed()
+            user_profile_page.wait_for_loading_progress_completed()
 
         assert user_profile_page.is_order_history_page()
 

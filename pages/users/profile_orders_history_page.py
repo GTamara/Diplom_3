@@ -14,7 +14,7 @@ class ProfileOrdersHistoryPage(BasePage):
             )
         )
 
-    @property  # теперь это — геттер свойства
+    @property
     def orders_quantity(self) -> int:
         return self.__orders_quantity
 
@@ -27,4 +27,3 @@ class ProfileOrdersHistoryPage(BasePage):
             ).text
             order_numbers_list.append(order_number)
         return order_numbers_list
-        # order_numbers_list = map(lambda order: x ** 2, numbers)

@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
-from helper_functions.shared_methods import SharedMethods
+from helper_functions.shared_api_methods import SharedApiMethods
 
 
 @pytest.fixture(scope="function")
@@ -15,7 +15,6 @@ def firefox_driver():
     options.add_argument('--window-size=1920, 1080')
     with allure.step('Открыть окно Firefox браузера'):
         driver = webdriver.Firefox(options=options)
-        # driver.maximize_window()
     yield driver
     with allure.step('Закрыть окно Firefox браузера'):
         driver.quit()
@@ -43,7 +42,7 @@ def driver(request):
 
 @pytest.fixture(scope="function")
 def user_login_valid_creds() -> Generator[dict[str, str], Any, None]:
-    shared_methods = SharedMethods()
+    shared_methods = SharedApiMethods()
     user_auth_data = shared_methods.get_register_user_payload()
     yield user_auth_data
     login_resp = shared_methods.login_user(user_auth_data) \

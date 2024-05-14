@@ -3,10 +3,10 @@ import allure
 from constants.urls import Urls
 from locators.header_locators import HeaderLocators
 from locators.orders.orders_list_locators import OrdersListLocators
-from pages.base_page import BasePage
+from pages.shared_elements_page import SharedElementsPage
 
 
-class OrdersListPage(BasePage):
+class OrdersListPage(SharedElementsPage):
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -16,7 +16,7 @@ class OrdersListPage(BasePage):
 
     @allure.step('Открыть страницу с лентой заказов')
     def get_orders_list_page(self):
-        self.driver.get(Urls.HOST + Urls.ORDERS_LIST_PATH)
+        self.get_page_by_url(Urls.HOST + Urls.ORDERS_LIST_PATH)
         self.wait_for_orders_list_page_ready()
 
     @allure.step('Кликнуть ссылку "Лента заказов"')
@@ -27,7 +27,7 @@ class OrdersListPage(BasePage):
     def wait_for_orders_list_page_ready(self):
         self.wait_for_loading_animation_completed()
         self.wait_for_loading_progress_completed()
-        self.wait_for_all_elements_loaded(OrdersListLocators.ORDER_ITEM_INGREDIENTS_CONTAINER)
+        self.wait_until_all_elements_loaded(OrdersListLocators.ORDER_ITEM_INGREDIENTS_CONTAINER)
 
     @allure.step('Проверить,что текущая страница - "Лента заказов"')
     def is_orders_list_page(self):
@@ -64,14 +64,12 @@ class OrdersListPage(BasePage):
 
     @allure.step('Подождать, пока элементы попапа станут кликабельными')
     def wait_for_order_details_popup_ready(self):
-        # подождать, пока все элементы попапа загрузятся и кнопка закрытия попапа будет доступна для клика
         self.find_element_with_wait(OrdersListLocators.ORDER_DETAILS_POPUP)
         self.find_element_with_wait(OrdersListLocators.ORDER_DETAILS_POPUP_CLOSE_BTN)
         self.wait_for_orders_list_page_ready()
 
     @allure.step('Кликнуть кнопку "X" в попапе с деталями заказа')
     def click_order_popup_close_btn(self):
-        # подождать, пока все элементы попапа загрузятся и кнопка закрытия попапа будет доступна для клика
         self.wait_for_order_details_popup_ready()
         self.find_element_with_wait(OrdersListLocators.ORDER_DETAILS_POPUP_CLOSE_BTN).click()
 

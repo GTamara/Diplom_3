@@ -1,11 +1,12 @@
 import allure
 
+from constants.urls import Urls
 from locators.header_locators import HeaderLocators
 from locators.users.user_profile_locators import UserProfileLocators
-from pages.base_page import BasePage
+from pages.shared_elements_page import SharedElementsPage
 
 
-class UserProfilePage(BasePage):
+class UserProfilePage(SharedElementsPage):
 
     @allure.step('Открыть страницу профиля пользователя')
     def click_header_user_profile_link(self):
@@ -17,6 +18,7 @@ class UserProfilePage(BasePage):
     def click_order_history_link(self):
         self.click_element(UserProfileLocators.ORDER_HISTORY_LINK)
         self.wait_for_loading_animation_completed()
+        self.wait_for_loading_progress_completed()
 
     @allure.step('Кликнуть кнопку выхода из аккаунта')
     def click_logout_button(self):
@@ -33,19 +35,15 @@ class UserProfilePage(BasePage):
         return is_profile_link_present_on_page \
             and is_profile_link_active \
             and self.find_element_with_wait(UserProfileLocators.USER_DATA_FORM) \
-            and 'account/profile' in self.driver.current_url
+            and Urls.PROFILE_PAGE_PATH in self.driver.current_url
 
     @allure.step('Проверить, что текущая страница - история заказов пользователя')
     def is_order_history_page(self):
-        # self.find_element_with_wait(UserProfileLocators.ORDER_HISTORY_CONTAINER)
-        is_order_history_link_active = \
-            self.is_nav_link_active(UserProfileLocators.ORDER_HISTORY_LINK)
-        x = self.are_elements_present_on_page(UserProfileLocators.ORDER_HISTORY_CONTAINER)
-        # z = self.are_elements_present_on_page(UserProfileLocators.ORDER_HISTORY_LIST)
-        y = 'account/order-history' in self.driver.current_url
+        is_order_history_link_active = self.is_nav_link_active(UserProfileLocators.ORDER_HISTORY_LINK)
+        self.wait_until_all_elements_loaded(UserProfileLocators.ORDER_HISTORY_CONTAINER)
         return is_order_history_link_active \
-            and 'account/order-history' in self.driver.current_url \
-            # and self.are_elements_present_on_page(UserProfileLocators.ORDER_HISTORY_CONTAINER)
+            and Urls.PROFILE_ORDERS_HISTORY in self.driver.current_url \
+            and self.are_elements_present_on_page(UserProfileLocators.ORDER_HISTORY_CONTAINER)
 
     @allure.step('Проверить, что ссылка имеет стили active')
     def is_nav_link_active(self, locator: tuple[str, str]):
