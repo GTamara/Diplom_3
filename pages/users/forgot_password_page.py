@@ -31,9 +31,9 @@ class ForgotPasswordPage(SharedElementsPage):
         )
         is_forgot_password_link_present_on_page = \
             self.are_elements_present_on_page(LoginPageLocators.FORGOT_PASSWORD_LINK)
-
+        current_url = self.get_current_url()
         return page_title == 'Восстановление пароля' \
-            and Urls.FORGOT_PASSWORD_PAGE_PATH in self.driver.current_url \
+            and Urls.FORGOT_PASSWORD_PAGE_PATH in current_url \
             and not  is_forgot_password_link_present_on_page
 
 

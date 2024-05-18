@@ -19,8 +19,9 @@ class LoginPage(SharedElementsPage):
         )
         is_login_btn = \
             self.are_elements_present_on_page(LoginPageLocators.LOGIN_BUTTON)
+        current_url = self.get_current_url()
         return page_title == 'Вход' \
-            and Urls.LOGIN_PAGE_PATH in self.driver.current_url \
+            and Urls.LOGIN_PAGE_PATH in current_url \
             and is_login_btn
 
     @allure.step('Кликнуть ссылку "Восстановить пароль"')

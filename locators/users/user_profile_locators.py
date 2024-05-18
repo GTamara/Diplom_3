@@ -13,5 +13,3 @@ class UserProfileLocators:
     LOGOUT_BUTTON = By.XPATH, '//button[text()="Выход"]'
 
     ANY = By.XPATH, '//*[text()="Загрузка"]'
-
-

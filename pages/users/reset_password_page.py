@@ -20,8 +20,9 @@ class ResetPasswordPage(SharedElementsPage):
         page_title = self.get_text_node(
             ResetPasswordLocators.PAGE_HEADING
         )
+        current_url = self.get_current_url()
         return page_title == 'Восстановление пароля' \
-            and Urls.RESET_PASSWORD_PAGE_PATH in self.driver.current_url
+            and Urls.RESET_PASSWORD_PAGE_PATH in current_url
 
     @allure.step('Заполнить поле для пароля')
     def fill_password_field(self, password_value: str | None):

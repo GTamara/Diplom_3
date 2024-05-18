@@ -3,7 +3,6 @@ import pytest
 
 from constants.urls import Urls
 from data.orders_data import test_orders_list
-from helper_functions.shared_ui_methods import SharedUiMethods
 from pages.orders.constructor_page import ConstructorPage
 from pages.orders.orders_list_page import OrdersListPage
 from pages.users.login_page import LoginPage
@@ -15,13 +14,14 @@ class TestOrdersList:
 
     @allure.title('Клик по ссылке "Лента заказов" ведет на страницу с лентой заказов')
     def test_click_orders_list_link_directs_to_orders_list_page(self, driver):
-        SharedUiMethods.get_main_page(driver)
         orders_list_page = OrdersListPage(driver)
+        orders_list_page.get_page_by_url(Urls.HOST)
         orders_list_page.wait_for_loading_animation_completed()
         orders_list_page.click_header_orders_list_link()
         orders_list_page.wait_for_orders_list_page_ready()
+        current_url = orders_list_page.get_current_url()
         assert orders_list_page.is_orders_list_page()
-        assert Urls.ORDERS_LIST_PATH in driver.current_url
+        assert Urls.ORDERS_LIST_PATH in current_url
 
     @allure.title('Лента заказов. Клик по заказу открывает попап с деталями заказа')
     def test_click_order_item_opens_popup_with_details(self, driver):

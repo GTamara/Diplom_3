@@ -8,11 +8,8 @@ class ProfileOrdersHistoryPage(BasePage):
 
     def __init__(self, driver):
         super().__init__(driver)
-        self.__orders_quantity = len(
-            self.driver.find_elements(
-                *OrdersProfileHistoryLocators.ORDER_ITEM
-            )
-        )
+        elems_array = self.find_elements_array_with_wait(OrdersProfileHistoryLocators.ORDER_ITEM)
+        self.__orders_quantity = len(elems_array)
 
     @property
     def orders_quantity(self) -> int:

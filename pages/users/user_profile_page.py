@@ -32,17 +32,19 @@ class UserProfilePage(SharedElementsPage):
             UserProfileLocators.PROFILE_LINK
         )
         is_profile_link_active = self.is_nav_link_active(UserProfileLocators.PROFILE_LINK)
+        current_url = self.get_current_url()
         return is_profile_link_present_on_page \
             and is_profile_link_active \
             and self.find_element_with_wait(UserProfileLocators.USER_DATA_FORM) \
-            and Urls.PROFILE_PAGE_PATH in self.driver.current_url
+            and Urls.PROFILE_PAGE_PATH in current_url
 
     @allure.step('Проверить, что текущая страница - история заказов пользователя')
     def is_order_history_page(self):
         is_order_history_link_active = self.is_nav_link_active(UserProfileLocators.ORDER_HISTORY_LINK)
         self.wait_until_all_elements_loaded(UserProfileLocators.ORDER_HISTORY_CONTAINER)
+        current_url = self.get_current_url()
         return is_order_history_link_active \
-            and Urls.PROFILE_ORDERS_HISTORY in self.driver.current_url \
+            and Urls.PROFILE_ORDERS_HISTORY in current_url \
             and self.are_elements_present_on_page(UserProfileLocators.ORDER_HISTORY_CONTAINER)
 
     @allure.step('Проверить, что ссылка имеет стили active')

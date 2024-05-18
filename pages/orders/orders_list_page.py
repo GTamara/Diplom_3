@@ -10,9 +10,8 @@ class OrdersListPage(SharedElementsPage):
 
     def __init__(self, driver):
         super().__init__(driver)
-        self.orders_quantity = len(
-            self.driver.find_elements(*OrdersListLocators.ORDER_ITEM)
-        )
+        elems_array = self.find_elements_array_with_wait(OrdersListLocators.ORDER_ITEM)
+        self.orders_quantity = len(elems_array)
 
     @allure.step('Открыть страницу с лентой заказов')
     def get_orders_list_page(self):

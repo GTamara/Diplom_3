@@ -25,6 +25,12 @@ class BasePage:
     def find_element_without_wait(self, locator: tuple[str, str]):
         return self.driver.find_element(*locator)
 
+    def find_elements_array_with_wait(self, locator: tuple[str, str]):
+        WebDriverWait(self.driver, Constants.TIMEOUT).until(
+            EC.visibility_of_all_elements_located(locator)
+        )
+        return self.driver.find_elements(*locator)
+
     def click_element(self, locator: tuple[str, str]):
         WebDriverWait(self.driver, Constants.TIMEOUT).until(
             EC.element_to_be_clickable(locator)
@@ -101,7 +107,7 @@ class BasePage:
         )
 
     def select_random_item_index(self, locator: tuple[str, str]):
-        items_list = self.driver.find_elements(*locator)
+        items_list = self.find_elements_array_with_wait(locator)
         index = random.randint(
             0, len(items_list) - 1
         )
@@ -133,6 +139,9 @@ class BasePage:
         + "var source = arguments[0];\n" + "var destination = arguments[1];\n" \
         + "simulateHTML5DragAndDrop(source,destination);"
         self.driver.execute_script(script_str, sourceElement, targetElement)
+
+    def get_current_url(self):
+        return self.driver.current_url
 
 
 
